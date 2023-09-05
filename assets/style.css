@@ -1,0 +1,12 @@
+.search-btn {
+  margin-top: 10px;
+  border-radius: 5px;
+}
+
+.card-body {
+  color: white;
+}
+
+.current-card-body {
+  border: solid 1px black;
+}

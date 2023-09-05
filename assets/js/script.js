@@ -2,6 +2,7 @@
 // Display 5 day forecast with all ABOVE criteria and ICONS depicting the current weather 
 let userInputEl = document.getElementById('user-input');
 let citySearchedEl = document.getElementById('city-search');
+let recentDiv = document.getElementById('recent-search');
 
 let day1Temp = document.querySelector('.day-1-temp');
 let day1Wind = document.querySelector('.day-1-wind');
@@ -38,8 +39,6 @@ let icon6 = document.querySelector('.day-6-img');
 
 const date = Date();
 
-// query select all day-1 thru day-6 of h5 then textcontent date + 1 and so on
-// global variables for current & future forecast and forecast format
 const current = new Date();
 let currentDay = current.getDate();
 let currentMonth = current.getMonth() + 1;
@@ -62,10 +61,11 @@ let formSubmitHandle = function (event) {
   if (citySearch != null) {
     getWeather(citySearch);
     futureForecastData(citySearch);
+    recentCitySearches(citySearch);
     citySearchedEl.value = '';
   } else {
     alert('Please enter a city.');
-  }
+  } localStorage.setItem("name", citySearch);
 };
 // TRY TO WRITE THE CODE AND SCREW UP THEN ASK FOR HELP
 // fetch data for weather from the search from open weather api for day 1
@@ -91,12 +91,8 @@ let getWeather = function (city) {
     })
 };
 
-// Fetch 5 day weather forecast data from api using city name - wind - humidity and TEMP
 // Need to tell local storage what to grab and WHERE to display it.
-// Need to access LS to grab temp & humidity in DATA
-// Grab wind speed inside of the object array not in
-// Use global variables to access each day's wind, temp and humidity to properly display.
-// Use let day = date.getDate();
+// Need to access LS to grab temp & humidity in DATA.
 let futureForecastData = function (city) {
   const APIKey = config.myKey;
   const forecastURL = 'https://api.openweathermap.org/data/2.5/forecast?q=' + city + "&appid=" + APIKey + '&units=imperial';
@@ -138,6 +134,24 @@ let futureForecastData = function (city) {
       icon6.setAttribute('src', iconSource + data.list[37].weather[0].icon + '@2x.png');
     })
 };
+
+function recentCitySearches (citySearch) {
+  let previousSearches = JSON.parse(localStorage.getItem('recentsearches'));
+    previousSearches.push({name: citySearch});
+    localStorage.setItem('recentsearches');
+
+  const searchBtn = document.createElement('button');
+  searchBtn.textContent = citySearch;
+
+  searchBtn.addEventListener('click', function () {
+    getWeather(citySearch);
+    futureForecastData(citySearch);
+  });
+
+  const recentDiv = document.getElementById('recent-search');
+  recentDiv.appendChild(searchBtn);
+};
+
 
 
 // function to pull data from local storage

@@ -23,3 +23,7 @@ img {
   max-width: 22%;
   max-height: 22%;
 }
+
+#recent-search {
+  list-style: none;
+}
